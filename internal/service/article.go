@@ -29,8 +29,8 @@ func (s *ArticleService) GetArticle(ctx context.Context, req *pb.GetArticleReque
 }
 func (s *ArticleService) ListArticle(ctx context.Context, req *pb.ListArticleRequest) (*pb.ListArticleReply, error) {
 	bz := make([]*models.BizArticle, 0)
-	var cnt int64
-	if err := models.DB.Model(new(models.BizArticle)).Count(&cnt).Offset(int((req.Page - 1) * req.Size)).Limit(int(req.Size)).
+	var total int64
+	if err := models.DB.Model(new(models.BizArticle)).Count(&total).Offset(int((req.GetPageNum() - 1) * req.GetPageSize())).Limit(int(req.GetPageSize())).
 		Find(&bz).Error; err != nil {
 		return nil, err
 	}
@@ -53,7 +53,7 @@ func (s *ArticleService) ListArticle(ctx context.Context, req *pb.ListArticleReq
 		})
 	}
 	return &pb.ListArticleReply{
-		List: list,
-		Cnt:  cnt,
+		List:  list,
+		Total: total,
 	}, nil
 }

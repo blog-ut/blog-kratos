@@ -60,20 +60,16 @@ paths:
                 - User
             operationId: User_ListUser
             parameters:
-                - name: page
+                - name: pageNum
                   in: query
                   schema:
                     type: integer
                     format: int64
-                - name: size
+                - name: pageSize
                   in: query
                   schema:
                     type: integer
                     format: int64
-                - name: Phone
-                  in: query
-                  schema:
-                    type: string
             responses:
                 "200":
                     description: OK

@@ -84,7 +84,31 @@ func (s *UserService) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb.
 	if err := db.First(user).Error; err != nil {
 		return nil, err
 	}
-	item := pb.UserItem{
+	item := BuildUser(user)
+	fmt.Println(user)
+	return &pb.GetUserReply{
+		User: item,
+	}, nil
+}
+func (s *UserService) ListUser(ctx context.Context, req *pb.ListUserRequest) (*pb.ListUserReply, error) {
+	userList := make([]*models.SysUser, 0)
+	var total int64
+	if err := models.DB.Model(new(models.SysUser)).Count(&total).Offset(int((req.GetPageNum() - 1) * req.PageSize)).Limit(int(req.GetPageSize())).
+		Find(&userList).Error; err != nil {
+		return nil, err
+	}
+	list := make([]*pb.UserItem, 0, len(userList))
+	for _, user := range userList {
+		list = append(list, BuildUser(user))
+	}
+	return &pb.ListUserReply{
+		Total: total,
+		List:  list,
+	}, nil
+}
+
+func BuildUser(user *models.SysUser) *pb.UserItem {
+	itemModel := pb.UserItem{
 		UserName: user.Username,
 		NickName: user.NickName,
 		Intro:    user.Intro,
@@ -97,11 +121,5 @@ func (s *UserService) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb.
 		CreateAt: user.CreatedAt.Unix(),
 		UpdateAt: user.UpdatedAt.Unix(),
 	}
-	fmt.Println(user)
-	return &pb.GetUserReply{
-		User: &item,
-	}, nil
-}
-func (s *UserService) ListUser(ctx context.Context, req *pb.ListUserRequest) (*pb.ListUserReply, error) {
-	return &pb.ListUserReply{}, nil
+	return &itemModel
 }

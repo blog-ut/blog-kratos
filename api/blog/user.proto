@@ -77,10 +77,10 @@ message GetUserReply {
 }
 
 message ListUserRequest {
-	int64 page = 1; //当前页码
-	int64 size = 2; //每页返回的个数
-	string Phone = 3;
+	int64 pageNum = 1; //当前页码
+	int64 pageSize = 2; //每页返回的个数
 }
+
 message ListUserReply {
 	int64 total = 1;
 	repeated UserItem list = 2;
