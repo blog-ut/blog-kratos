@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package api.blog;
+
+import "google/api/annotations.proto";
+
+option go_package = "blog-kratos/api/blog;blog";
+option java_multiple_files = true;
+option java_package = "api.blog";
+
+service Article {
+  rpc CreateArticle (CreateArticleRequest) returns (CreateArticleReply);
+  rpc UpdateArticle (UpdateArticleRequest) returns (UpdateArticleReply);
+  rpc DeleteArticle (DeleteArticleRequest) returns (DeleteArticleReply);
+  rpc GetArticle (GetArticleRequest) returns (GetArticleReply);
+  rpc ListArticle (ListArticleRequest) returns (ListArticleReply) {
+    option (google.api.http) = {
+      get: "/article/list",
+    };
+  };
+}
+
+message CreateArticleRequest {}
+message CreateArticleReply {}
+
+message UpdateArticleRequest {}
+message UpdateArticleReply {}
+
+message DeleteArticleRequest {}
+message DeleteArticleReply {}
+
+message GetArticleRequest {}
+message GetArticleReply {}
+
+message ListArticleRequest {
+  int64 page = 1; //当前页码
+  int64 size = 2; //每页返回的个数
+}
+message ListArticleReply {
+  int64 cnt = 1; //总个数
+  repeated ListRepoItem list = 2;
+}
+
+message ListRepoItem{
+  int64 UserId = 1;
+  int64 SubjectId = 2;
+  string Title = 3;
+  string Intro = 4;
+  string Cover = 5;
+  string Content = 6;
+  string ContentMd = 7;
+  string Code = 8;
+  int64 KeyWords = 9;
+  int64 Sort = 10;
+  int64 IsElite = 11;
+  int64 Hits = 12;
+  int64 ArticleStatus = 13;
+}

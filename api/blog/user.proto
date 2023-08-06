@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+package api.blog;
+
+import "google/api/annotations.proto";
+
+option go_package = "blog-kratos/api/blog;blog";
+option java_multiple_files = true;
+option java_package = "api.blog";
+
+service User {
+	rpc Login (LoginRequest) returns (LoginReply) {
+		option (google.api.http) = {
+			post: "/login",
+			body: "*"
+		};
+	};
+	rpc RegisterUser (RegisterUserRequest) returns (RegisterUserReply) {
+		option (google.api.http) = {
+			post: "/register",
+			body: "*"
+		};
+	};
+	rpc CreateUser (CreateUserRequest) returns (CreateUserReply);
+	rpc UpdateUser (UpdateUserRequest) returns (UpdateUserReply);
+	rpc DeleteUser (DeleteUserRequest) returns (DeleteUserReply);
+	rpc GetUser (GetUserRequest) returns (GetUserReply) {
+		option (google.api.http) = {
+			post: "/user/userInfo",
+			body: "*"
+		};
+	};
+	rpc ListUser (ListUserRequest) returns (ListUserReply) {
+		option (google.api.http) = {
+			get: "/user/List",
+		};
+	};
+}
+
+message LoginRequest {
+	string username = 1;
+	string password = 2;
+}
+message LoginReply {
+	string token = 1;
+}
+
+message CreateUserRequest {}
+message CreateUserReply {}
+
+message RegisterUserRequest {
+	string UserName = 2;
+	string NickName = 3;
+	string Password = 4;
+	string Intro = 5;
+	string Avatar = 6;
+	string Phone = 7;
+	string Email = 8;
+	string Address = 9;
+	uint32 IsEnable = 10;
+	uint32 IsAdmin = 11;
+}
+message RegisterUserReply {}
+
+message UpdateUserRequest {}
+message UpdateUserReply {}
+
+message DeleteUserRequest {}
+message DeleteUserReply {}
+
+message GetUserRequest {
+	string UserName = 2;
+	string Phone = 3;
+}
+message GetUserReply {
+	UserItem user = 1;
+}
+
+message ListUserRequest {
+	int64 page = 1; //当前页码
+	int64 size = 2; //每页返回的个数
+	string Phone = 3;
+}
+message ListUserReply {
+	int64 total = 1;
+	repeated UserItem list = 2;
+}
+
+message UserItem{
+	string UserName = 2;
+	string NickName = 3;
+	string Intro = 5;
+	string Avatar = 6;
+	string Phone = 7;
+	string Email = 8;
+	string Address = 9;
+	uint32 IsEnable = 10;
+	uint32 IsAdmin = 11;
+	int64 CreateAt = 12;
+	int64 UpdateAt = 13;
+}
